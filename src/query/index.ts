@@ -20,7 +20,7 @@ export { createQuerySignal } from './createQuerySignal';
 export { hashQueryKey, matchesPartialKey, normalizeQueryKey } from './key';
 export type { QueryBoundaryProps } from './QueryBoundary';
 export { default as QueryBoundary } from './QueryBoundary';
-export { getDefaultQueryClient, useQueryClient } from './queryClientContext';
+export { getDefaultQueryClient, QueryClientContext, useQueryClient } from './queryClientContext';
 export type { QueryClientProviderProps } from './QueryClientProvider';
 export { QueryClientProvider } from './QueryClientProvider';
 export type {
