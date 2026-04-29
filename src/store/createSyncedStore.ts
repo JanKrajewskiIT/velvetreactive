@@ -22,6 +22,7 @@ export interface SyncedStore<TData extends object> {
   flush: () => Promise<void>;
   importData: (data: TData) => void;
   collectionActions: <TItem extends { id: string }>(key: keyof TData & string) => StoreCollectionActions<TItem>;
+  dispose: () => void;
 }
 
 export const createSyncedStore = <TData extends object>(
@@ -48,9 +49,11 @@ export const createSyncedStore = <TData extends object>(
   const [store, setStore] = createStore<TData>(loadFromStorage());
 
   let initialized = false;
+  let disposeAutosave = () => {};
 
-  const autosave = createRoot(() =>
-    createAutosaveSignal({
+  const autosave = createRoot((dispose) => {
+    disposeAutosave = dispose;
+    return createAutosaveSignal({
       source: () => JSON.stringify(store),
       save: async (serialized, signal) => {
         localStorage.setItem(options.key, serialized);
@@ -59,8 +62,8 @@ export const createSyncedStore = <TData extends object>(
       },
       delayMs: options.autosave?.delayMs,
       saveFeedbackMs: options.autosave?.saveFeedbackMs,
-    }),
-  );
+    });
+  });
 
   const init = async (): Promise<void> => {
     if (initialized) return;
@@ -76,7 +79,7 @@ export const createSyncedStore = <TData extends object>(
       setStore(reconcile(normalized));
       localStorage.setItem(options.key, JSON.stringify(normalized));
     } catch {
-      /* init failure is non-fatal — localStorage data is used as fallback */
+      return;
     }
   };
 
@@ -97,5 +100,8 @@ export const createSyncedStore = <TData extends object>(
     flush: autosave.flush,
     importData,
     collectionActions,
+    dispose: () => {
+      disposeAutosave();
+    },
   };
 };

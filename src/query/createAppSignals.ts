@@ -34,14 +34,6 @@ interface AppQueryResult<TData> {
   invalidate: () => void;
   refetch: () => Promise<TData>;
 }
-
-/**
- * Minimal authentication adapter consumed by `createAppQuery`. Any auth
- * provider can satisfy this contract by exposing reactive accessors for
- * `isAuthenticated`, the current user reference, and the access token. When
- * provided, queries automatically wait for an authenticated session and are
- * re-invalidated whenever the access token changes.
- */
 interface AuthStateAdapter {
   isAuthenticated: Accessor<boolean>;
   user: Accessor<unknown>;
@@ -62,14 +54,18 @@ function createAppQuery<TData, TSelected>(
 function createAppQuery<TData>(options: CreateAppQueryOptions<TData>): AppQueryResult<unknown> {
   const auth = options.auth;
   const client = options.client ?? getDefaultQueryClient();
+  const isAuthReady = () => {
+    if (!auth) {
+      return true;
+    }
+
+    const user = auth.user();
+    return auth.isAuthenticated() || auth.accessToken() !== undefined || (user !== null && user !== undefined);
+  };
 
   const enabled = () => {
     const isEnabled = options.enabled?.() ?? true;
-    if (!auth) {
-      return isEnabled;
-    }
-
-    return isEnabled && (auth.isAuthenticated() || auth.user() !== null || auth.accessToken() !== undefined);
+    return isEnabled && isAuthReady();
   };
 
   const signal = createQuerySignal({
