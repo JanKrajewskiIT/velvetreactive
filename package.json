@@ -20,7 +20,7 @@
     "dist/**/*"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=25"
   },
   "scripts": {
     "prepublishOnly": "npm run verify",
@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@jankrajewskiit/configs": "^1.1.7",
+    "@jankrajewskiit/configs": "^1.1.8",
     "@types/node": "^25.6.0",
     "eslint": "^9.39.4",
     "husky": "^9.1.7",
@@ -49,6 +49,6 @@
     "solid-js": "^1.9.12",
     "typescript": "~6.0.3",
     "vite": "^8.0.10",
-    "vite-plugin-dts": "^4.5.4"
+    "vite-plugin-dts": "^5.0.0"
   }
 }

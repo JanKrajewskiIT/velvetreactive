@@ -13,6 +13,12 @@ interface ConfigureReactiveOptions {
 const runtimeConfig: ReactiveRuntimeConfig = {};
 
 const configureReactive = (options: ConfigureReactiveOptions): void => {
+  if (typeof window === 'undefined') {
+    throw new Error(
+      '@jankrajewskiit/reactive: configureReactive is browser-only and cannot be called in an SSR environment.',
+    );
+  }
+
   if (options.getAccessToken !== undefined) {
     runtimeConfig.getAccessToken = options.getAccessToken;
   }
