@@ -4,4 +4,13 @@ dist-ssr/
 .tmp/
 *.local
 .env*
-AGENTS.md
+
+# Generated agent customizations
+/AGENTS.md
+/CLAUDE.md
+/.claude/
+/.codex/
+/.cursor/
+/.github/skills/
+/.github/instructions/
+/.vscode/settings.json
