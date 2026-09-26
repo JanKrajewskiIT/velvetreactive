@@ -1,34 +1,34 @@
-import type { CreateQueryClientOptions } from './query/types';
+import type { CreateQueryClientOptions } from './query-client.js';
 
-interface ReactiveRuntimeConfig {
+export interface ReactiveRuntimeConfig {
   getAccessToken?: () => Promise<string | undefined> | string | undefined;
   queryClientOptions?: CreateQueryClientOptions;
 }
 
-interface ConfigureReactiveOptions {
+export interface ConfigureReactiveOptions {
   getAccessToken?: () => Promise<string | undefined> | string | undefined;
   queryClientOptions?: CreateQueryClientOptions;
 }
 
-const runtimeConfig: ReactiveRuntimeConfig = {};
+let runtimeConfig: ReactiveRuntimeConfig = {};
 
-const configureReactive = (options: ConfigureReactiveOptions): void => {
+export const configureReactive = (options: ConfigureReactiveOptions): void => {
   if (typeof window === 'undefined') {
-    throw new Error(
-      '@jankrajewskiit/reactive: configureReactive is browser-only and cannot be called in an SSR environment.',
-    );
+    throw new Error('Reactive runtime configuration is browser-only');
   }
 
-  if (options.getAccessToken !== undefined) {
-    runtimeConfig.getAccessToken = options.getAccessToken;
-  }
-
-  if (options.queryClientOptions !== undefined) {
-    runtimeConfig.queryClientOptions = options.queryClientOptions;
-  }
+  runtimeConfig = {
+    ...(options.getAccessToken !== undefined
+      ? { getAccessToken: options.getAccessToken }
+      : runtimeConfig.getAccessToken !== undefined
+        ? { getAccessToken: runtimeConfig.getAccessToken }
+        : {}),
+    ...(options.queryClientOptions !== undefined
+      ? { queryClientOptions: options.queryClientOptions }
+      : runtimeConfig.queryClientOptions !== undefined
+        ? { queryClientOptions: runtimeConfig.queryClientOptions }
+        : {}),
+  };
 };
 
-const getReactiveRuntimeConfig = (): ReactiveRuntimeConfig => runtimeConfig;
-
-export type { ConfigureReactiveOptions, ReactiveRuntimeConfig };
-export { configureReactive, getReactiveRuntimeConfig };
+export const getReactiveRuntimeConfig = (): Readonly<ReactiveRuntimeConfig> => ({ ...runtimeConfig });

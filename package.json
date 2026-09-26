@@ -1,12 +1,14 @@
 {
   "name": "@jankrajewskiit/reactive",
-  "version": "0.1.4",
+  "version": "0.2.0",
+  "description": "Headless SolidJS primitives for HTTP, queries, mutations, and reactive stores.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JanKrajewskiIT/velvetreactive.git"
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -14,41 +16,40 @@
     }
   },
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
-  "packageManager": "npm@11.13.0",
   "files": [
-    "dist/**/*"
+    "dist"
   ],
-  "engines": {
-    "node": ">=25"
-  },
   "scripts": {
     "prepublishOnly": "npm run verify",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run typecheck && npm run lint && npm run build && npm run verify:pkg",
+    "test": "npm run build && npm run test:types && node --conditions=browser --test tests",
+    "test:types": "tsc -p tests/tsconfig.json",
+    "verify": "npm run typecheck && npm run lint && npm run test && npm run verify:pkg",
     "verify:pkg": "publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "prepare": "husky"
   },
+  "engines": {
+    "node": ">=25"
+  },
+  "packageManager": "npm@12.1.0",
   "peerDependencies": {
     "solid-js": ">=1.9"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.18.2",
-    "@jankrajewskiit/configs": "^1.1.8",
-    "@types/node": "^25.6.0",
-    "eslint": "^9.39.4",
+    "@arethetypeswrong/cli": "^0.18.5",
+    "@jankrajewskiit/configs": "^2.0.5",
+    "@types/node": "^26.6.3",
+    "eslint": "^10.11.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.4.0",
-    "prettier": "^3.8.3",
-    "publint": "^0.3.18",
-    "solid-js": "^1.9.12",
-    "typescript": "~6.0.3",
-    "vite": "^8.0.10",
-    "vite-plugin-dts": "^5.0.0"
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.9",
+    "publint": "^0.3.24",
+    "solid-js": "^1.9.15",
+    "typescript": "~7.0.2"
   }
 }

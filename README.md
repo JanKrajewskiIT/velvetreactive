@@ -1,41 +1,44 @@
 # @jankrajewskiit/reactive
 
-Headless reactive primitives extracted from `@jankrajewskiit/ui`:
+Headless SolidJS primitives for shared runtime configuration, Fetch-based HTTP clients, query state, mutations, pagination, and local or remotely synchronized stores.
 
-- **`store/`** — `createSyncedStore`, `createAutosaveSignal`,
-  `createPersistedSignal`, `createSelectionStore`, `createEntityStore`,
-  `createStoreCollectionActions`.
-- **`query/`** — `createQueryClient`, `createQuerySignal`,
-  `createMutationSignal`, `createPaginatedQuery`, `createInfiniteQuery`,
-  `createCrudSignals`, `createAppQuery`, `createAppMutation`,
-  `QueryClientProvider`, `QueryBoundary`, `useQueryClient`.
-- **`http/`** — `createHttpClient`, `createApiClients`,
-  `unwrapCollectionResponse`, `ApiError`.
+## Requirements
 
-## Peer dependencies
+- Node.js 25 or newer for package tooling
+- SolidJS 1.9 or newer supplied by the consuming application
+- A browser runtime for APIs that use runtime configuration, Fetch, or Web Storage
 
-- `solid-js`
+## Installation
+
+```sh
+npm install @jankrajewskiit/reactive solid-js
+```
+
+The package is ESM-only and exposes its public API from `@jankrajewskiit/reactive`. Deep imports are not supported.
 
 ## Runtime configuration
 
-`createHttpClient` and the default `QueryClient` read from a small runtime
-config exposed by `configureReactive`. Wire it once in your bootstrap, e.g.:
+Configure shared authentication and query defaults during browser application startup:
 
 ```ts
 import { configureReactive } from '@jankrajewskiit/reactive';
-import { getAuthAccessToken, type OidcAuthConfig } from '@jankrajewskiit/auth';
-
-const authConfig: OidcAuthConfig = {
-  /* ... */
-};
 
 configureReactive({
-  getAccessToken: () => getAuthAccessToken(authConfig),
+  getAccessToken: () => session.accessToken,
   queryClientOptions: {
-    defaultOptions: { queries: { staleTime: 30_000 } },
+    defaultOptions: {
+      queries: { staleTime: 30_000 },
+    },
   },
 });
 ```
 
-Without `getAccessToken`, requests go out unauthenticated. Without
-`queryClientOptions`, defaults are used.
+HTTP requests resolve the current token provider at request time. The default query client snapshots its options when it is first created.
+
+## Package verification
+
+```sh
+npm run verify
+```
+
+This runs type checking, linting, contract tests, and package compatibility checks.

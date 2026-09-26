@@ -40,7 +40,8 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 25
+          scope: '@jankrajewskiit'
           cache: 'npm'
 
       - name: Install dependencies

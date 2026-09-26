@@ -15,16 +15,12 @@ jobs:
     env:
       GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
-    strategy:
-      matrix:
-        node-version: [22, 25]
-
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 25
           scope: '@jankrajewskiit'
           cache: 'npm'
 
