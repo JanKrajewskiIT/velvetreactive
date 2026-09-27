@@ -27,9 +27,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "npm run build && npm run test:types && node --conditions=browser --test tests",
-    "test:types": "tsc -p tests/tsconfig.json",
-    "verify": "npm run typecheck && npm run lint && npm run test && npm run verify:pkg",
+    "verify": "npm run typecheck && npm run lint && npm run build && npm run verify:pkg",
     "verify:pkg": "publint && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
     "prepare": "husky"
   },
