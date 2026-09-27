@@ -50,4 +50,4 @@ jobs:
       - name: Publish
         run: npm publish
         env:
-          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
