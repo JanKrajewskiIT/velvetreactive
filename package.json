@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/reactive",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Headless SolidJS primitives for HTTP, queries, mutations, and reactive stores.",
   "type": "module",
   "license": "MIT",
