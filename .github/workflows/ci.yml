@@ -10,4 +10,4 @@ jobs:
   verify:
     uses: ./.github/workflows/verify.yml
     secrets:
-      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}

@@ -10,6 +10,13 @@ Headless SolidJS primitives for shared runtime configuration, Fetch-based HTTP c
 
 ## Installation
 
+The package is published to GitHub Packages. Route the scope in the consumer's `.npmrc`:
+
+```ini
+@jankrajewskiit:registry=https://npm.pkg.github.com/
+//npm.pkg.github.com/:_authToken=${GHCR_TOKEN}
+```
+
 ```sh
 npm install @jankrajewskiit/reactive solid-js
 ```
@@ -35,10 +42,14 @@ configureReactive({
 
 HTTP requests resolve the current token provider at request time. The default query client snapshots its options when it is first created.
 
+## Lifetimes
+
+Query, app-query, paginated, infinite, and autosave primitives register effects and cleanups, so they must be created inside a reactive owner such as a component or `createRoot`. `createSyncedStore` owns its own root; call `dispose()` when it is no longer needed.
+
 ## Package verification
 
 ```sh
 npm run verify
 ```
 
-This runs type checking, linting, contract tests, and package compatibility checks.
+This runs type checking, linting, the build, and package compatibility checks.

@@ -1,0 +1,6 @@
+.agents/
+.claude/
+.codex/
+.cursor/
+dist/
+package-lock.json

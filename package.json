@@ -9,6 +9,7 @@
     "url": "git+https://github.com/JanKrajewskiIT/velvetreactive.git"
   },
   "sideEffects": false,
+  "prettier": "@jankrajewskiit/configs/prettier",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
