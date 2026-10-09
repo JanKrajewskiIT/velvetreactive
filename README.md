@@ -4,7 +4,7 @@ Headless SolidJS primitives for shared runtime configuration, Fetch-based HTTP c
 
 ## Requirements
 
-- Node.js 25 or newer for package tooling
+- Node.js 26 or newer for package tooling
 - SolidJS 1.9 or newer supplied by the consuming application
 - A browser runtime for APIs that use runtime configuration, Fetch, or Web Storage
 
@@ -53,3 +53,36 @@ npm run verify
 ```
 
 This runs type checking, linting, the build, and package compatibility checks.
+
+## Upgrading
+
+Changes for every published version are recorded in [CHANGELOG.md](CHANGELOG.md).
+
+## Provenance verification
+
+Releases are published with npm provenance. Verify an installed version with:
+
+```sh
+npm audit signatures @jankrajewskiit/reactive
+```
+
+A passing audit attests that the registry signature and the sigstore provenance attestation match the tarball, which ties it to the source commit and the publish workflow run.
+
+## Release workflow
+
+1. Confirm the default branch is green and `CHANGELOG.md` has a section for the new version.
+2. `npm version patch|minor|major` and commit the changelog edit with the bump.
+3. `git push --follow-tags`.
+
+The `v<semver>` tag starts `publish.yml`: verify, version check, then `npm publish --provenance --access public`. A failed provenance step fails the run; re-run it against the same tag once sigstore is reachable.
+
+Recover from a broken release by publishing a superseding patch and running `npm deprecate @jankrajewskiit/reactive@<broken-version> "<reason>"`. Never unpublish a version consumers may have installed.
+
+## Branch protection
+
+Protect the default branch with:
+
+- a required, passing `verify` status check that includes the `npm audit` step;
+- at least one approving CODEOWNERS review;
+- a branch that is up to date before merging;
+- force pushes and non-administrative direct pushes disabled.

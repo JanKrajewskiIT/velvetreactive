@@ -1,0 +1,11 @@
+* @jankrajewskiit
+/specs/ @jankrajewskiit
+/src/ @jankrajewskiit
+/.github/workflows/ @jankrajewskiit
+/.github/dependabot.yml @jankrajewskiit
+/package.json @jankrajewskiit
+/package-lock.json @jankrajewskiit
+/.npmrc @jankrajewskiit
+/eslint.config.mjs @jankrajewskiit
+/tsconfig.json @jankrajewskiit
+/lint-staged.config.mjs @jankrajewskiit

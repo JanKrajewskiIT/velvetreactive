@@ -9,5 +9,8 @@ on:
 jobs:
   verify:
     uses: ./.github/workflows/verify.yml
+    permissions:
+      contents: read
+      packages: read
     secrets:
-      NPM_REGISTRY_TOKEN: ${{ secrets.NPM_REGISTRY_TOKEN }}
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}

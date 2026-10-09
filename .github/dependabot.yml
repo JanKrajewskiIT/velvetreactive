@@ -1,0 +1,66 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+    assignees:
+      - jankrajewskiit
+    groups:
+      eslint:
+        patterns:
+          - '@eslint/*'
+          - eslint
+          - 'eslint-*'
+          - typescript-eslint
+      stylelint:
+        patterns:
+          - stylelint
+          - 'stylelint-*'
+      prettier:
+        patterns:
+          - prettier
+          - 'prettier-*'
+      vite:
+        patterns:
+          - vite
+          - 'vite-*'
+      typescript:
+        patterns:
+          - typescript
+          - '@typescript/*'
+      solid:
+        patterns:
+          - solid-js
+          - 'solid-*'
+      jankrajewskiit:
+        patterns:
+          - '@jankrajewskiit/*'
+      tooling:
+        patterns:
+          - husky
+          - lint-staged
+          - publint
+          - '@arethetypeswrong/cli'
+    ignore:
+      - dependency-name: node
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+      - github-actions
+    assignees:
+      - jankrajewskiit
