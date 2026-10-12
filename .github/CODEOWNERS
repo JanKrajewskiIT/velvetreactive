@@ -9,3 +9,9 @@
 /eslint.config.mjs @jankrajewskiit
 /tsconfig.json @jankrajewskiit
 /lint-staged.config.mjs @jankrajewskiit
+/security/ @JanKrajewskiIT
+/scripts/ @JanKrajewskiIT
+/deploy/ @JanKrajewskiIT
+/.gitleaks* @JanKrajewskiIT
+/.semgrep* @JanKrajewskiIT
+/SECURITY.md @JanKrajewskiIT

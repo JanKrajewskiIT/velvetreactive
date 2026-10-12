@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/reactive",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Headless SolidJS primitives for HTTP, queries, mutations, and reactive stores.",
   "keywords": [
     "solidjs",
@@ -34,18 +34,24 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run verify",
-    "build": "tsc -p tsconfig.json",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run lint && npm run build && npm run verify:pkg",
-    "verify:pkg": "publint --strict && attw --pack . --entrypoints . --profile esm-only --ignore-rules internal-resolution-error",
-    "prepare": "husky"
-  },
-  "engines": {
-    "node": ">=26"
+    "verify": "npm run toolchain && npm run editor:check && npm run format:check && npm run lint && npm run build && npm run verify:pkg",
+    "verify:pkg": "npm run verify:types && publint --strict && attw --pack . --entrypoints . --profile esm-only",
+    "prepare": "husky",
+    "toolchain": "configs-toolchain",
+    "audit:deps": "configs-audit",
+    "prebuild": "npm run toolchain",
+    "verify:types": "tsc -p tsconfig.declarations.json",
+    "clean": "configs-clean-dist",
+    "editor:sync": "configs-editor --write",
+    "editor:check": "configs-editor",
+    "deps:check": "knip --no-exit-code --reporter json",
+    "deps:strict": "knip"
   },
   "packageManager": "npm@12.2.0",
   "peerDependencies": {
@@ -53,15 +59,18 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@jankrajewskiit/configs": "^3.4.1",
-    "@types/node": "^26.6.5",
+    "@jankrajewskiit/configs": "^3.5.3",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.12.0",
     "husky": "^9.1.7",
+    "knip": "^6.41.0",
     "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
     "solid-js": "^1.9.17",
-    "typescript": "npm:@typescript/typescript6@^6.0.2"
+    "typescript": "npm:@typescript/typescript6@~6.0.2"
+  },
+  "overrides": {
+    "eslint": "$eslint"
   }
 }
