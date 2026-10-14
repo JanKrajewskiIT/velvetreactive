@@ -12,14 +12,9 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: codeql-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   analysis:
-    if: github.event.repository.private == false || vars.CODEQL_ENABLED == 'true'
-    uses: JanKrajewskiIT/velvetconfigs/.github/workflows/codeql-analysis.yml@v3.6.0 # Pin the release commit before enabling.
+    uses: JanKrajewskiIT/velvetconfigs/.github/workflows/codeql-analysis.yml@f69d3572370104eb3015fbd46c5fa86bdbb1cdad # v3.6.3
     permissions:
       actions: read
       contents: read
