@@ -11,7 +11,7 @@ import {
 } from './mutationState.js';
 import type { MutationOptions, MutationStatus } from './mutationTypes.js';
 
-export type MutationOutcome<TData> =
+type MutationOutcome<TData> =
   | { readonly status: 'success'; readonly data: TData; readonly callbackErrors: readonly Error[] }
   | { readonly status: 'error'; readonly error: Error; readonly callbackErrors: readonly Error[] };
 

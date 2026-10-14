@@ -28,7 +28,7 @@ interface ActiveFetch<TData> {
 
 const createdEntries = new WeakSet<object>();
 
-export const isQueryEntry = <TData>(handle: QueryEntryHandle<TData>): handle is QueryEntry<TData> =>
+const isQueryEntry = <TData>(handle: QueryEntryHandle<TData>): handle is QueryEntry<TData> =>
   createdEntries.has(handle);
 
 export const resolveQueryEntry = <TData>(client: QueryClient, key: QueryKey): QueryEntry<TData> => {

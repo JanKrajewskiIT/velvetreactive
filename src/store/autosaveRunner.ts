@@ -30,8 +30,8 @@ export interface AutosaveRunner<TData> {
   readonly dispose: () => void;
 }
 
-export const DEFAULT_AUTOSAVE_DELAY_MS = 500;
-export const DEFAULT_SAVE_FEEDBACK_MS = 3000;
+const DEFAULT_AUTOSAVE_DELAY_MS = 500;
+const DEFAULT_SAVE_FEEDBACK_MS = 3000;
 const DEFAULT_MAX_WAIT_MS = 5000;
 
 export const createAutosaveRunner = <TData>({
