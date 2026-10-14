@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/reactive",
-  "version": "3.5.3",
+  "version": "3.6.0",
   "description": "Headless SolidJS primitives for HTTP, queries, mutations, and reactive stores.",
   "keywords": [
     "solidjs",
@@ -40,7 +40,7 @@
     "lint:fix": "eslint . --fix --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "verify": "npm run toolchain && npm run editor:check && npm run format:check && npm run lint && npm run build && npm run verify:pkg",
+    "verify": "npm run toolchain && npm run editor:check && npm run format:check && npm run lint && npm run quality:check && npm run build && npm run verify:pkg",
     "verify:pkg": "npm run verify:types && publint --strict && attw --pack . --entrypoints . --profile esm-only",
     "prepare": "husky",
     "toolchain": "configs-toolchain",
@@ -51,7 +51,10 @@
     "editor:sync": "configs-editor --write",
     "editor:check": "configs-editor",
     "deps:check": "knip --no-exit-code --reporter json",
-    "deps:strict": "knip"
+    "deps:strict": "configs-unused",
+    "architecture:check": "configs-architecture",
+    "duplicates:report": "configs-duplicates",
+    "quality:check": "npm run architecture:check && npm run duplicates:report && npm run deps:strict"
   },
   "packageManager": "npm@12.2.0",
   "peerDependencies": {
@@ -59,7 +62,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
-    "@jankrajewskiit/configs": "^3.5.3",
+    "@jankrajewskiit/configs": "^3.6.0",
     "@typescript/native": "npm:typescript@^7.0.2",
     "eslint": "^10.12.0",
     "husky": "^9.1.7",
@@ -68,7 +71,9 @@
     "prettier": "^3.9.10",
     "publint": "^0.3.25",
     "solid-js": "^1.9.17",
-    "typescript": "npm:@typescript/typescript6@~6.0.2"
+    "typescript": "npm:@typescript/typescript6@~6.0.2",
+    "dependency-cruiser": "^18.6.0",
+    "jscpd": "~5.4.1"
   },
   "overrides": {
     "eslint": "$eslint"

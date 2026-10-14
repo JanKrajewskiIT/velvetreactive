@@ -2,6 +2,7 @@ export interface ApiErrorOptions {
   status: number;
   url: string;
   details?: unknown;
+  cause?: unknown;
 }
 
 export class ApiError extends Error {
@@ -9,8 +10,8 @@ export class ApiError extends Error {
   readonly url: string;
   readonly details: unknown;
 
-  constructor(message: string, { status, url, details }: ApiErrorOptions) {
-    super(message);
+  constructor(message: string, { status, url, details, cause }: ApiErrorOptions) {
+    super(message, { cause });
     this.name = 'ApiError';
     this.status = status;
     this.url = url;

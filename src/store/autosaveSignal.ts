@@ -2,20 +2,19 @@ import type { Accessor } from 'solid-js';
 import { createEffect, createMemo, on, onCleanup } from 'solid-js';
 
 import { assertOwner } from '../shared/assertOwner.js';
-import type { AutosaveStatus } from './autosaveRunner.js';
+import type { AutosaveRunnerOptions, AutosaveStatus } from './autosaveRunner.js';
 import { createAutosaveRunner } from './autosaveRunner.js';
 
-export interface CreateAutosaveSignalOptions<TData> {
+export interface CreateAutosaveSignalOptions<TData> extends Omit<AutosaveRunnerOptions<TData>, 'readSnapshot'> {
   source: Accessor<TData>;
-  save: (data: TData, signal: AbortSignal) => Promise<void>;
-  delayMs?: number;
-  saveFeedbackMs?: number;
 }
 
 export interface AutosaveSignal {
   status: Accessor<AutosaveStatus>;
   error: Accessor<Error | undefined>;
   isSaving: Accessor<boolean>;
+  dirty: Accessor<boolean>;
+  persistenceError: Accessor<Error | undefined>;
   flush: () => Promise<void>;
 }
 
@@ -34,6 +33,8 @@ export const createAutosaveSignal = <TData>({
     status: runner.status,
     error: runner.error,
     isSaving: () => runner.status() === 'saving',
+    dirty: runner.dirty,
+    persistenceError: runner.persistenceError,
     flush: runner.flush,
   };
 };

@@ -1,6 +1,8 @@
 export type { ApiErrorOptions } from './http/ApiError.js';
 export { ApiError } from './http/ApiError.js';
 export { buildUrl } from './http/buildUrl.js';
+export type { ApiFailureKind } from './http/classifyApiError.js';
+export { classifyApiError, isRetryableApiError } from './http/classifyApiError.js';
 export type { CreateApiClientsOptions, DefaultApiClientMap, HttpClientMap } from './http/createApiClients.js';
 export { createApiClients } from './http/createApiClients.js';
 export { createHttpClient } from './http/createHttpClient.js';
@@ -62,6 +64,7 @@ export type {
 } from './query/queryTypes.js';
 export type { ConfigureReactiveOptions, ReactiveRuntimeConfig } from './runtime/runtimeConfig.js';
 export { configureReactive, getReactiveRuntimeConfig } from './runtime/runtimeConfig.js';
+export type { AutosaveRunnerOptions } from './store/autosaveRunner.js';
 export type { AutosaveStatus } from './store/autosaveRunner.js';
 export type { AutosaveSignal, CreateAutosaveSignalOptions } from './store/autosaveSignal.js';
 export { createAutosaveSignal } from './store/autosaveSignal.js';

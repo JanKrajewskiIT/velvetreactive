@@ -120,7 +120,8 @@ export const createQueryClient = (options: CreateQueryClientOptions = {}): Query
     },
     removeQueries: (partialKey) => {
       assertActive();
-      for (const [hash] of findMatching(partialKey)) {
+      for (const [hash, entry] of findMatching(partialKey)) {
+        entry.abort();
         entries.delete(hash);
       }
     },

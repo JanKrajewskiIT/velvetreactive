@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.6.0
+
+- Report unexpected failures of detached mutation execution instead of leaving rejected promises unhandled.
+- Serialize autosave writes, retain the latest queued edit, bound debounce/retries and persist pending snapshots before disposal.
+- Expose dirty/local-persistence/conflict states. `flush()` now rejects when saving fails; consumers must handle it.
+- Add HTTP failure classification and transient-read retry helpers; abort requests when their cache entries are removed.
+
 ## 3.3.6
 
 - Add shared source/image security gates, CycloneDX SBOMs, pinned CI tooling, periodic security scans and Knip reports without changing the package version.

@@ -48,9 +48,14 @@ export const createAppMutation = <TData, TVariables, TContext = unknown>({
       const registrations =
         perCallCallbacks === undefined ? creationRegistrations : [...creationRegistrations, perCallCallbacks];
       // Operation failures are already published through mutation state; only callback failures remain to surface.
-      void engine.run(variables, registrations).then((outcome) => {
-        outcome.callbackErrors.forEach(reportUnhandledError);
-      });
+      void engine
+        .run(variables, registrations)
+        .then((outcome) => {
+          outcome.callbackErrors.forEach(reportUnhandledError);
+        })
+        .catch((error: unknown) =>
+          reportUnhandledError(error instanceof Error ? error : new Error('Mutation failed.')),
+        );
     },
     mutateAsync: (variables) => engine.execute(variables, creationRegistrations),
     reset: engine.reset,

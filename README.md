@@ -46,6 +46,14 @@ HTTP requests resolve the current token provider at request time. The default qu
 
 Query, app-query, paginated, infinite, and autosave primitives register effects and cleanups, so they must be created inside a reactive owner such as a component or `createRoot`. `createSyncedStore` owns its own root; call `dispose()` when it is no longer needed.
 
+## Reliable saves and request failures
+
+`createAutosaveSignal` exposes `dirty`, `persistenceError`, `error` and `status`. Saves are serialized per runner; a newer edit replaces the queued snapshot without cancelling the current write. Debounce defaults to 500 ms and continuous edits are flushed after at most five seconds when no write is active. `flush()` waits for the queue and rejects on failure; callers must handle that rejection. `dispose()` persists the latest dirty snapshot through `persistSnapshot` before stopping timers and cancelling the owner's request. Supply that hook when work must survive disposal. `createSyncedStore` persists each local edit before its remote save.
+
+Automatic write retries are opt-in (`retry`, `shouldRetry`) and must be used only with an idempotent save contract. Conflict responses (409/412) remain visible and are not automatically retried. A later edit does not clear that conflict; explicit `flush()` is the retry path. `classifyApiError` distinguishes cancellation, network, authorization, validation, conflict and transient service failures. `isRetryableApiError` is suitable for query retry policies. Cache removal cancels the associated in-flight requests.
+
+These guarantees order one editor's writes; server revision checks are still needed to resolve simultaneous edits from separate clients.
+
 ## Package verification
 
 ```sh
@@ -106,3 +114,7 @@ Source verification includes Gitleaks, Semgrep, actionlint, zizmor and Trivy con
 Knip is available through `npm run deps:check` (JSON report) and `npm run deps:strict` (blocking unused-code check). CI records the report while the initial findings are reviewed; security scans remain blocking. Public library entry exports are preserved.
 
 Configure `CONFIGS_READ_TOKEN` for private Configs source access alongside the existing npm read token. See [shared security controls](https://github.com/JanKrajewskiIT/velvetconfigs/blob/v3.5.0/security/README.md) for required GitHub settings, reports, image signing, staging variables, WAF activation and manual acceptance checks.
+
+## Code quality
+
+The shared Configs policy runs architecture, duplication and strict unused-code checks through `npm run quality:check` in `verify`. See [quality controls and rollout](https://github.com/JanKrajewskiIT/velvetconfigs/blob/main/quality/README.md) for commands, reports and CodeQL activation. No tests or coverage gate are added.

@@ -92,8 +92,8 @@ export const createSyncedStore = <TData extends object>({
     const runner = createAutosaveRunner<string>({
       ...autosave,
       readSnapshot: serialized,
+      persistSnapshot: (snapshot) => storage.setItem(key, snapshot),
       save: async (snapshot, signal) => {
-        storage.setItem(key, snapshot);
         await saveRemote(JSON.parse(snapshot) as TData, signal);
       },
     });

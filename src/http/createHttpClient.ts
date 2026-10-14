@@ -54,7 +54,13 @@ export const createHttpClient = (config: HttpClientConfig = {}): HttpClient => {
       init = await interceptor(url, init);
     }
 
-    let response = await fetchImplementation(url, init);
+    let response: Response;
+    try {
+      response = await fetchImplementation(url, init);
+    } catch (error) {
+      if (options.signal?.aborted || (error instanceof Error && error.name === 'AbortError')) throw error;
+      throw new ApiError('Network request failed', { status: 0, url, cause: error });
+    }
     for (const interceptor of config.responseInterceptors ?? []) {
       response = await interceptor(response, url);
     }
