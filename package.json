@@ -1,6 +1,6 @@
 {
   "name": "@jankrajewskiit/reactive",
-  "version": "3.7.0",
+  "version": "3.7.5",
   "description": "Headless SolidJS primitives for HTTP, queries, mutations, and reactive stores.",
   "keywords": [
     "solidjs",
