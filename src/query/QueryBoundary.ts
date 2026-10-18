@@ -23,7 +23,7 @@ const createBranch = <TValue>(
   when: () => TValue | undefined,
   render: (value: NonNullable<TValue>) => JSX.Element,
 ): JSX.Element =>
-  createComponent(KeyedMatch<TValue>, {
+  createComponent<KeyedMatchProps<TValue>>(KeyedMatch, {
     get when() {
       return when();
     },
