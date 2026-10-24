@@ -26,11 +26,13 @@ in `dependency-security`; source findings in `security-*`; CodeQL in
 through the repository's Actions permissions. Download reports before expiry
 when tracking a correction for longer.
 
-The release uses local `build-package.yml` and the quality workflow uses local
-`quality-package.yml`. Their canonical templates are maintained in VelvetConfigs;
-local copies let each repository adopt the change without a new shared release.
-Update the copies together when changing these templates. Existing external
-scanner and publisher references remain pinned to immutable commits.
+Release building, code quality and dependency/SPA security checks use reusable
+workflows from VelvetConfigs 3.21.0, pinned to the immutable commit
+`ad587f572dab1149288acf3f8001a7ea6ea9e225`. Temporary local copies of these
+workflows have been removed. Repository-specific triggers, public build inputs,
+permissions and release orchestration remain in this repository. Scanner and
+publisher callers and direct tooling checkouts select the same release. Nested
+tooling pins inside the shared workflows remain owned by that published version.
 
 SBOM generation inventories dependencies without checking advisory databases.
 Retaining and signing an SBOM on the delivery path does not establish a clean
@@ -44,8 +46,8 @@ Repository settings have not been changed by this configuration edit.
 
 ## Validation scope
 
-Workflow YAML, embedded JavaScript syntax, local workflow input/secret contracts,
-job dependencies and weekly schedule configuration have been checked locally.
+Workflow YAML, embedded JavaScript syntax, shared workflow input/secret contracts,
+job dependencies and weekly schedule configuration require rechecking after adopting the shared release.
 This does not establish successful GitHub Actions execution or a passing scan.
 
 `npm run verify` from `./` remains unrun for this change.
