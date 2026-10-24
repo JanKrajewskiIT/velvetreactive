@@ -1,0 +1,104 @@
+name: Build release package
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        type: string
+        default: .
+      node-version-file:
+        type: string
+        default: .nvmrc
+      verify-env:
+        description: JSON object of public build environment variables.
+        type: string
+        default: '{}'
+      package-artifact:
+        description: Name for the built npm archive; empty disables packing.
+        type: string
+        default: ''
+      spa-artifact:
+        description: Name for the generated .deployment/spa runtime context.
+        type: string
+        default: ''
+      build-script:
+        description: Build script; empty is for packages shipping source configuration.
+        type: string
+        default: build
+    secrets:
+      GHCR_TOKEN:
+        required: false
+      NPM_READ_TOKEN:
+        required: false
+      CONFIGS_READ_TOKEN:
+        required: false
+permissions:
+  contents: read
+  packages: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env: ${{ fromJSON(inputs.verify-env) }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: ${{ inputs.node-version-file }}
+          registry-url: https://npm.pkg.github.com
+          scope: '@jankrajewskiit'
+          cache: npm
+          cache-dependency-path: ${{ inputs.working-directory }}/package-lock.json
+      - name: Select declared npm
+        run: npm install --global "$(node -p "require('./package.json').packageManager")" --ignore-scripts --registry https://registry.npmjs.org
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        env:
+          GHCR_TOKEN: ${{ secrets.NPM_READ_TOKEN || secrets.GHCR_TOKEN || github.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_READ_TOKEN || secrets.GHCR_TOKEN || github.token }}
+      - name: Generate npm dependency SBOM
+        run: |
+          mkdir -p .artifacts
+          npm sbom --sbom-format=cyclonedx --package-lock-only > .artifacts/npm-sbom.cdx.json
+      - name: Upload npm dependency SBOM
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: npm-sbom
+          path: ${{ inputs.working-directory }}/.artifacts/npm-sbom.cdx.json
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
+      - name: Build release artifact
+        if: inputs.build-script != ''
+        env:
+          BUILD_SCRIPT: ${{ inputs.build-script }}
+        run: npm run "$BUILD_SCRIPT"
+      - name: Pack built package
+        if: inputs.package-artifact != ''
+        run: |
+          mkdir -p .artifacts
+          npm pack --ignore-scripts --pack-destination .artifacts
+      - name: Upload package
+        if: inputs.package-artifact != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ${{ inputs.package-artifact }}
+          path: ${{ inputs.working-directory }}/.artifacts/*.tgz
+          archive: true
+          compression-level: 0
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload SPA runtime context
+        if: inputs.spa-artifact != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: ${{ inputs.spa-artifact }}
+          path: ${{ inputs.working-directory }}/.deployment/spa/
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 7
+    timeout-minutes: 30
