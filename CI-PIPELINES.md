@@ -47,7 +47,7 @@ Repository settings have not been changed by this configuration edit.
 ## Validation scope
 
 Workflow YAML, embedded JavaScript syntax, shared workflow input/secret contracts,
-job dependencies and weekly schedule configuration require rechecking after adopting the shared release.
+job dependencies and weekly schedule configuration have been checked locally against the published shared release.
 This does not establish successful GitHub Actions execution or a passing scan.
 
 `npm run verify` from `./` remains unrun for this change.
